@@ -1,5 +1,9 @@
 This was a project that I created in 4 days for the GTMK game jam!
 
+Play it here: https://moontyzoo.itch.io/tower-of-power
+![msedge_dk8PwPRnXx](https://github.com/user-attachments/assets/9512163f-7a6d-4cb3-ae07-d169018a6c87)
+
+
 Here are my most notable accomplishments with this project
   - Created ALL of the pixel art! It turned out looking super great for how little time I had.
   - I reused some Health, Hitbox, and Hurtbox components that I developed for a previous project. Creating clean code allowed me to reuse this functionality without issue!
