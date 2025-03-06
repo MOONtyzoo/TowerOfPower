@@ -1,0 +1,79 @@
+[gd_scene load_steps=13 format=3 uid="uid://e2juixwr22p6"]
+
+[ext_resource type="Texture2D" uid="uid://47vxj7cm4xix" path="res://GameObjects/Turrets/Ballista/BallistaStand.png" id="1_j8kl5"]
+[ext_resource type="Shader" path="res://VFX/Shaders/SpriteEffects.gdshader" id="1_lied0"]
+[ext_resource type="Script" path="res://GameObjects/Turrets/Ballista/Ballista.gd" id="1_lokvw"]
+[ext_resource type="Texture2D" uid="uid://b3ytfdu145bbf" path="res://GameObjects/Turrets/Ballista/BallistaBack.png" id="2_y2j4c"]
+[ext_resource type="PackedScene" uid="uid://c6ta5f7j80de0" path="res://GameObjects/Projectiles/BallistaArrow.tscn" id="3_3y1ly"]
+[ext_resource type="Texture2D" uid="uid://g0enrlqxqtbe" path="res://GameObjects/Turrets/Ballista/BallistaArrow.png" id="3_gc0n7"]
+[ext_resource type="Texture2D" uid="uid://d1d0yfsohxtsr" path="res://GameObjects/Turrets/Ballista/BallistaFront.png" id="4_ppnyl"]
+[ext_resource type="AudioStream" uid="uid://cdn33q438aew8" path="res://Sounds/SFX/PlaceTower.wav" id="8_7ywuc"]
+[ext_resource type="AudioStream" uid="uid://c76tpbqlv1c2l" path="res://Sounds/SFX/HitBoxy.wav" id="9_4voug"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s3hks"]
+shader = ExtResource("1_lied0")
+shader_parameter/outline_color = Color(1, 1, 1, 0)
+shader_parameter/fill_color = null
+shader_parameter/fill_amount = null
+shader_parameter/desaturation = null
+shader_parameter/darkness = 1.0
+shader_parameter/transparency = 0.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ficlf"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("8_7ywuc")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_0gdd6"]
+random_pitch = 1.2
+streams_count = 1
+stream_0/stream = ExtResource("9_4voug")
+stream_0/weight = 1.0
+
+[node name="Ballista" type="Node2D"]
+material = SubResource("ShaderMaterial_s3hks")
+script = ExtResource("1_lokvw")
+attack_range = 275.0
+projectile_speed = 275.0
+scn_projectile = ExtResource("3_3y1ly")
+
+[node name="BallistaStand" type="Sprite2D" parent="."]
+use_parent_material = true
+position = Vector2(0, -5.5)
+texture = ExtResource("1_j8kl5")
+
+[node name="PivotPoint" type="Node2D" parent="."]
+use_parent_material = true
+position = Vector2(0, -9.5)
+
+[node name="BallistaBack" type="Sprite2D" parent="PivotPoint"]
+use_parent_material = true
+position = Vector2(1.5, -2.5)
+texture = ExtResource("2_y2j4c")
+offset = Vector2(1, 0)
+
+[node name="BallistaArrow" type="Sprite2D" parent="PivotPoint"]
+use_parent_material = true
+position = Vector2(-7, -3.5)
+texture = ExtResource("3_gc0n7")
+
+[node name="BallistaFront" type="Sprite2D" parent="PivotPoint"]
+use_parent_material = true
+position = Vector2(1.5, -2.5)
+texture = ExtResource("4_ppnyl")
+
+[node name="ProjectileHook" type="Node2D" parent="PivotPoint"]
+position = Vector2(-7, -3.5)
+
+[node name="TurretPlaced" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_ficlf")
+pitch_scale = 1.4
+
+[node name="Shoot" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_0gdd6")
+volume_db = -6.0
+pitch_scale = 1.13
+max_distance = 500.0
+attenuation = 2.0
+bus = &"Turrets"

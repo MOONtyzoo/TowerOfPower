@@ -1,0 +1,113 @@
+[gd_scene load_steps=18 format=3 uid="uid://dslsn36hxu63n"]
+
+[ext_resource type="Script" path="res://GameObjects/Enemies/BaseEnemy.gd" id="1_jljir"]
+[ext_resource type="Shader" path="res://VFX/Shaders/SpriteEffects.gdshader" id="2_2qjam"]
+[ext_resource type="Texture2D" uid="uid://d2vurxifb33w6" path="res://GameObjects/Enemies/Goblins/BlueGoblin.png" id="3_7siec"]
+[ext_resource type="Script" path="res://Components/HealthComponent.gd" id="4_0xt2q"]
+[ext_resource type="Script" path="res://Components/HurtboxComponent.gd" id="5_a2l01"]
+[ext_resource type="Script" path="res://Components/StateMachine/StateMachine.gd" id="6_xav85"]
+[ext_resource type="Script" path="res://GameObjects/Enemies/States/SearchTarget.gd" id="7_ygyn6"]
+[ext_resource type="Script" path="res://GameObjects/Enemies/States/Moving.gd" id="8_h2gbh"]
+[ext_resource type="Script" path="res://GameObjects/Enemies/States/MeleeAttack.gd" id="9_yf2ub"]
+[ext_resource type="Script" path="res://Components/HitboxComponent.gd" id="10_x4ny6"]
+[ext_resource type="Script" path="res://GameObjects/Enemies/States/Dead.gd" id="11_4e26m"]
+[ext_resource type="AudioStream" uid="uid://vue317kamjmj" path="res://Sounds/SFX/HitSineThud.wav" id="12_jq05v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wuita"]
+size = Vector2(24, 29)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x351i"]
+resource_local_to_scene = true
+shader = ExtResource("2_2qjam")
+shader_parameter/outline_color = Color(0.698039, 0.780392, 0.764706, 0)
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/fill_amount = null
+shader_parameter/desaturation = 0.0
+shader_parameter/darkness = 1.0
+shader_parameter/transparency = 0.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_k2uaj"]
+radius = 12.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c7v0s"]
+radius = 16.0312
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1khxy"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("12_jq05v")
+stream_0/weight = 1.0
+
+[node name="BlueGoblin" type="CharacterBody2D"]
+collision_layer = 4
+script = ExtResource("1_jljir")
+coin_drop = 50
+attack_cooldown = 1.5
+attack_range = 65.0
+attack_range_spread = 20.0
+movement_speed = 20.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_wuita")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_x351i")
+texture = ExtResource("3_7siec")
+
+[node name="HealthComponent" type="Node2D" parent="."]
+position = Vector2(0, -14)
+script = ExtResource("4_0xt2q")
+max_health = 40.0
+hit_numbers = true
+
+[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+visible = false
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_a2l01")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_k2uaj")
+
+[node name="StateMachine" type="Node2D" parent="." node_paths=PackedStringArray("base_node", "initial_state")]
+script = ExtResource("6_xav85")
+base_node = NodePath("..")
+initial_state = NodePath("SearchTarget")
+
+[node name="SearchTarget" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("next_state")]
+script = ExtResource("7_ygyn6")
+next_state = NodePath("../Moving")
+
+[node name="Moving" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("attack_state")]
+script = ExtResource("8_h2gbh")
+attack_state = NodePath("../MeleeAttack")
+
+[node name="MeleeAttack" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("return_state")]
+script = ExtResource("9_yf2ub")
+return_state = NodePath("../Moving")
+attack_duration = 0.33
+
+[node name="HitboxComponent" type="Area2D" parent="StateMachine/MeleeAttack"]
+visible = false
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("10_x4ny6")
+damage = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StateMachine/MeleeAttack/HitboxComponent"]
+shape = SubResource("CircleShape2D_c7v0s")
+
+[node name="Dead" type="Node2D" parent="StateMachine"]
+script = ExtResource("11_4e26m")
+death_knockback = 35.0
+death_time = 1.15
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_1khxy")
+volume_db = -6.0
+pitch_scale = 1.2
+max_distance = 500.0
+attenuation = 2.0
+bus = &"Enemies"

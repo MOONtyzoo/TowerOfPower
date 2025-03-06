@@ -1,0 +1,162 @@
+[gd_scene load_steps=23 format=3 uid="uid://c7e1n2e77ndxj"]
+
+[ext_resource type="Script" path="res://GameObjects/TowerBlock/TowerBlock.gd" id="1_s17fc"]
+[ext_resource type="Texture2D" uid="uid://c1skgq453xi63" path="res://GameObjects/TowerBlock/TowerBlock.png" id="2_ew4vh"]
+[ext_resource type="FontFile" uid="uid://bihnr7dm2ykys" path="res://Fonts/TinyUnicode.ttf" id="3_3x7gj"]
+[ext_resource type="Script" path="res://Components/HealthComponent.gd" id="3_whkvr"]
+[ext_resource type="Script" path="res://Components/HurtboxComponent.gd" id="4_lwd1r"]
+[ext_resource type="Shader" path="res://VFX/Shaders/SpriteEffects.gdshader" id="6_0sxd2"]
+[ext_resource type="Texture2D" uid="uid://drco3uchy1aff" path="res://GameObjects/TowerBlock/TurretPlatform.png" id="7_b5unw"]
+[ext_resource type="Script" path="res://GameObjects/TowerBlock/TurretPlatform.gd" id="8_bscjh"]
+[ext_resource type="Shader" path="res://Systems/HealthBars/HealthBarShader.gdshader" id="9_dp522"]
+[ext_resource type="Texture2D" uid="uid://bv4l8fs32ls7f" path="res://GameObjects/TowerBlock/TowerBlockHealthBarEmpty.png" id="10_oo702"]
+[ext_resource type="Texture2D" uid="uid://3qwhfte6g6sh" path="res://GameObjects/TowerBlock/TowerBlockHealthBarFull.png" id="11_5luhi"]
+[ext_resource type="AudioStream" uid="uid://cdn33q438aew8" path="res://Sounds/SFX/PlaceTower.wav" id="12_jslqr"]
+[ext_resource type="AudioStream" uid="uid://dcdnbcypbpua4" path="res://Sounds/SFX/HitNoisy.wav" id="12_v5ad8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2pu0m"]
+resource_local_to_scene = true
+shader = ExtResource("6_0sxd2")
+shader_parameter/outline_color = Color(0, 0, 0, 0)
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/fill_amount = null
+shader_parameter/desaturation = null
+shader_parameter/darkness = 1.0
+shader_parameter/transparency = 0.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_djyti"]
+size = Vector2(64, 39)
+
+[sub_resource type="LabelSettings" id="LabelSettings_p2jc4"]
+font = ExtResource("3_3x7gj")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_no0ca"]
+size = Vector2(68, 40)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t1rlc"]
+resource_local_to_scene = true
+shader = ExtResource("6_0sxd2")
+shader_parameter/outline_color = Color(0, 0, 0, 0)
+shader_parameter/fill_color = null
+shader_parameter/fill_amount = null
+shader_parameter/desaturation = null
+shader_parameter/darkness = 1.0
+shader_parameter/transparency = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vip3k"]
+resource_local_to_scene = true
+shader = ExtResource("6_0sxd2")
+shader_parameter/outline_color = Color(0, 0, 0, 0)
+shader_parameter/fill_color = null
+shader_parameter/fill_amount = null
+shader_parameter/desaturation = null
+shader_parameter/darkness = 1.0
+shader_parameter/transparency = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3i2hb"]
+resource_local_to_scene = true
+shader = ExtResource("9_dp522")
+shader_parameter/fill_amount = 1.0
+shader_parameter/full_texture = ExtResource("11_5luhi")
+shader_parameter/empty_texture = ExtResource("10_oo702")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_uuwc8"]
+random_pitch = 1.2
+streams_count = 1
+stream_0/stream = ExtResource("12_jslqr")
+stream_0/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3wnd2"]
+random_pitch = 1.2
+streams_count = 1
+stream_0/stream = ExtResource("12_v5ad8")
+stream_0/weight = 1.0
+
+[node name="TowerBlock" type="CharacterBody2D"]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_s17fc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_2pu0m")
+texture = ExtResource("2_ew4vh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_djyti")
+
+[node name="DebugLabel" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 1.0
+offset_right = 20.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "ID: 1
+"
+label_settings = SubResource("LabelSettings_p2jc4")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthComponent" type="Node2D" parent="."]
+position = Vector2(0, -13)
+script = ExtResource("3_whkvr")
+max_health = 100.0
+hit_numbers = true
+hit_number_type = 2
+
+[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("4_lwd1r")
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+visible = false
+shape = SubResource("RectangleShape2D_no0ca")
+
+[node name="LeftTurretPlatform" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_t1rlc")
+position = Vector2(-43, 10)
+texture = ExtResource("7_b5unw")
+offset = Vector2(0.5, -11.5)
+script = ExtResource("8_bscjh")
+is_left_platform = true
+
+[node name="TurretHook" type="Node2D" parent="LeftTurretPlatform"]
+position = Vector2(-1, -5.5)
+
+[node name="RightTurretPlatform" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_vip3k")
+position = Vector2(42, 10)
+texture = ExtResource("7_b5unw")
+offset = Vector2(0.5, -11.5)
+flip_h = true
+script = ExtResource("8_bscjh")
+
+[node name="TurretHook" type="Node2D" parent="RightTurretPlatform"]
+position = Vector2(2, -5.5)
+
+[node name="HealthBar" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_3i2hb")
+position = Vector2(0, -12)
+texture = ExtResource("11_5luhi")
+
+[node name="Placed" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_uuwc8")
+volume_db = 9.369
+pitch_scale = 0.8
+
+[node name="Hurt" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_3wnd2")
+volume_db = -6.0
+pitch_scale = 0.8
+max_distance = 750.0
+attenuation = 2.0

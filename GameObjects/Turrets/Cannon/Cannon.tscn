@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dceutxuv37igx"]
+
+[ext_resource type="Texture2D" uid="uid://bkuig6l2a6drr" path="res://GameObjects/Turrets/Cannon/Cannon.png" id="1_jteb1"]
+[ext_resource type="Texture2D" uid="uid://dlwvyeqd3dcga" path="res://GameObjects/Turrets/Cannon/CannonStand.png" id="2_et6yo"]
+
+[node name="Cannon" type="Node2D"]
+
+[node name="PivotPoint" type="Node2D" parent="."]
+position = Vector2(2.5, -9.5)
+
+[node name="Cannon" type="Sprite2D" parent="PivotPoint"]
+position = Vector2(-4.5, -0.5)
+texture = ExtResource("1_jteb1")
+
+[node name="CannonStand" type="Sprite2D" parent="."]
+position = Vector2(0, -6)
+texture = ExtResource("2_et6yo")

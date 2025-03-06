@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://c6ta5f7j80de0"]
+
+[ext_resource type="Script" path="res://GameObjects/Projectiles/BaseProjectile.gd" id="1_vo35e"]
+[ext_resource type="Texture2D" uid="uid://g0enrlqxqtbe" path="res://GameObjects/Turrets/Ballista/BallistaArrow.png" id="2_kkci8"]
+[ext_resource type="Script" path="res://Components/HitboxComponent.gd" id="3_b10ae"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jei3m"]
+size = Vector2(3, 2)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l5h7f"]
+radius = 5.75
+
+[node name="BallistaArrow" type="CharacterBody2D"]
+collision_layer = 0
+script = ExtResource("1_vo35e")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(3, 0)
+texture = ExtResource("2_kkci8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3.5, 0)
+shape = SubResource("RectangleShape2D_jei3m")
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+position = Vector2(-4, 0)
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("3_b10ae")
+damage = 4
+start_active = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("CircleShape2D_l5h7f")

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://csy0jh3uhkxnb"
+path="res://.godot/imported/HoliznaCC0 - Astroids.mp3-84faf05a1add35f95788e3ae997b8451.mp3str"
+
+[deps]
+
+source_file="res://Sounds/Music/HoliznaCC0 - Astroids.mp3"
+dest_files=["res://.godot/imported/HoliznaCC0 - Astroids.mp3-84faf05a1add35f95788e3ae997b8451.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
