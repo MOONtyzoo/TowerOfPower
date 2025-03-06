@@ -1,4 +1,4 @@
-Tower of Power is a solo project that I created in 4 days for the GTMK game jam!
+Tower of Power is a solo project that I created in 4 days for the GTMK game jam! The theme was "Built to Scale" which I interpreted by making a tower game where you literally build your tower to scale as tall as possible.
 
 Play it here: https://moontyzoo.itch.io/tower-of-power
 
